@@ -1,12 +1,12 @@
 /*
- * angular-elastic v2.5.2
+ * angular-elastic v2.5.1
  * (c) 2014 Monospaced http://monospaced.com
  * License: MIT
  */
 
 if (typeof module !== 'undefined' &&
-    typeof exports !== 'undefined' &&
-    module.exports === exports){
+  typeof exports !== 'undefined' &&
+  module.exports === exports) {
   module.exports = 'monospaced.elastic';
 }
 
@@ -18,26 +18,26 @@ angular.module('monospaced.elastic', [])
 
   .directive('msdElastic', [
     '$timeout', '$window', 'msdElasticConfig',
-    function($timeout, $window, config) {
+    function ($timeout, $window, config) {
       'use strict';
 
       return {
         require: 'ngModel',
-        restrict: 'A',
-        link: function(scope, element, attrs, ngModel) {
+        restrict: 'A, C',
+        link: function (scope, element, attrs, ngModel) {
           // cache a reference to the DOM element
           var ta = element[0],
-              $ta = element,
-              $$inited = false;
+            $ta = element,
+            $$inited = false;
 
           // ensure the element is a textarea, and browser is capable
           if (ta.nodeName !== 'TEXTAREA' || !$window.getComputedStyle) {
-              return;
+            return;
           }
 
-          attrs.$observe('msdElastic', function(val){
-              if (val && !$$inited) init();
-              if (!val && $$inited) destroy();
+          attrs.$observe('msdElastic', function (val) {
+            if (val && !$$inited) init();
+            if (!val && $$inited) destroy();
           });
 
           function init() {
@@ -55,45 +55,45 @@ angular.module('monospaced.elastic', [])
             ta.value = text;
 
             var append = attrs.msdElastic ? attrs.msdElastic.replace(/\\n/g, '\n') : config.append,
-                $win = angular.element($window),
-                mirrorInitStyle = 'position: absolute; top: -999px; right: auto; bottom: auto;' +
-                                  'left: 0; overflow: hidden; -webkit-box-sizing: content-box;' +
-                                  '-moz-box-sizing: content-box; box-sizing: content-box;' +
-                                  'min-height: 0 !important; height: 0 !important; padding: 0;' +
-                                  'word-wrap: break-word; border: 0;',
-                $mirror = angular.element('<textarea aria-hidden="true" tabindex="-1" ' +
-                                          'style="' + mirrorInitStyle + '"/>').data('elastic', true),
-                mirror = $mirror[0],
-                taStyle = getComputedStyle(ta),
-                resize = taStyle.getPropertyValue('resize'),
-                borderBox = taStyle.getPropertyValue('box-sizing') === 'border-box' ||
-                            taStyle.getPropertyValue('-moz-box-sizing') === 'border-box' ||
-                            taStyle.getPropertyValue('-webkit-box-sizing') === 'border-box',
-                boxOuter = !borderBox ? {width: 0, height: 0} : {
-                              width:  parseInt(taStyle.getPropertyValue('border-right-width'), 10) +
-                                      parseInt(taStyle.getPropertyValue('padding-right'), 10) +
-                                      parseInt(taStyle.getPropertyValue('padding-left'), 10) +
-                                      parseInt(taStyle.getPropertyValue('border-left-width'), 10),
-                              height: parseInt(taStyle.getPropertyValue('border-top-width'), 10) +
-                                      parseInt(taStyle.getPropertyValue('padding-top'), 10) +
-                                      parseInt(taStyle.getPropertyValue('padding-bottom'), 10) +
-                                      parseInt(taStyle.getPropertyValue('border-bottom-width'), 10)
-                            },
-                minHeightValue = parseInt(taStyle.getPropertyValue('min-height'), 10),
-                heightValue = parseInt(taStyle.getPropertyValue('height'), 10),
-                minHeight = Math.max(minHeightValue, heightValue) - boxOuter.height,
-                maxHeight = parseInt(taStyle.getPropertyValue('max-height'), 10),
-                mirrored,
-                active,
-                copyStyle = ['font-family',
-                             'font-size',
-                             'font-weight',
-                             'font-style',
-                             'letter-spacing',
-                             'line-height',
-                             'text-transform',
-                             'word-spacing',
-                             'text-indent'];
+              $win = angular.element($window),
+              mirrorInitStyle = 'position: absolute; top: -999px; right: auto; bottom: auto;' +
+                'left: 0; overflow: hidden; -webkit-box-sizing: content-box;' +
+                '-moz-box-sizing: content-box; box-sizing: content-box;' +
+                'min-height: 0 !important; height: 0 !important; padding: 0;' +
+                'word-wrap: break-word; border: 0;',
+              $mirror = angular.element('<textarea aria-hidden="true" tabindex="-1" ' +
+                'style="' + mirrorInitStyle + '"/>').data('elastic', true),
+              mirror = $mirror[0],
+              taStyle = getComputedStyle(ta),
+              resize = taStyle.getPropertyValue('resize'),
+              borderBox = taStyle.getPropertyValue('box-sizing') === 'border-box' ||
+                taStyle.getPropertyValue('-moz-box-sizing') === 'border-box' ||
+                taStyle.getPropertyValue('-webkit-box-sizing') === 'border-box',
+              boxOuter = !borderBox ? {width: 0, height: 0} : {
+                width: parseInt(taStyle.getPropertyValue('border-right-width'), 10) +
+                parseInt(taStyle.getPropertyValue('padding-right'), 10) +
+                parseInt(taStyle.getPropertyValue('padding-left'), 10) +
+                parseInt(taStyle.getPropertyValue('border-left-width'), 10),
+                height: parseInt(taStyle.getPropertyValue('border-top-width'), 10) +
+                parseInt(taStyle.getPropertyValue('padding-top'), 10) +
+                parseInt(taStyle.getPropertyValue('padding-bottom'), 10) +
+                parseInt(taStyle.getPropertyValue('border-bottom-width'), 10)
+              },
+              minHeightValue = parseInt(taStyle.getPropertyValue('min-height'), 10),
+              heightValue = parseInt(taStyle.getPropertyValue('height'), 10),
+              minHeight = Math.max(minHeightValue, heightValue) - boxOuter.height,
+              maxHeight = parseInt(taStyle.getPropertyValue('max-height'), 10),
+              mirrored,
+              active,
+              copyStyle = ['font-family',
+                'font-size',
+                'font-weight',
+                'font-style',
+                'letter-spacing',
+                'line-height',
+                'text-transform',
+                'word-spacing',
+                'text-indent'];
 
             // exit if elastic already applied (or is the mirror element)
             if ($ta.data('elastic')) {
@@ -123,7 +123,7 @@ angular.module('monospaced.elastic', [])
               mirrored = ta;
               // copy the essential styles from the textarea to the mirror
               taStyle = getComputedStyle(ta);
-              angular.forEach(copyStyle, function(val) {
+              angular.forEach(copyStyle, function (val) {
                 mirrorStyle += val + ':' + taStyle.getPropertyValue(val) + ';';
               });
               mirror.setAttribute('style', mirrorStyle);
@@ -131,10 +131,10 @@ angular.module('monospaced.elastic', [])
 
             function adjust() {
               var taHeight,
-                  taComputedStyleWidth,
-                  mirrorHeight,
-                  width,
-                  overflow;
+                taComputedStyleWidth,
+                mirrorHeight,
+                width,
+                overflow;
 
               if (mirrored !== ta) {
                 initMirror();
@@ -175,7 +175,7 @@ angular.module('monospaced.elastic', [])
                 }
 
                 // small delay to prevent an infinite loop
-                $timeout(function() {
+                $timeout(function () {
                   active = false;
                 }, 1, false);
 
@@ -201,13 +201,13 @@ angular.module('monospaced.elastic', [])
 
             $win.bind('resize', forceAdjust);
 
-            scope.$watch(function() {
+            scope.$watch(function () {
               return ngModel.$modelValue;
-            }, function(newValue) {
+            }, function (newValue) {
               forceAdjust();
             });
 
-            scope.$on('elastic:adjust', function() {
+            scope.$on('elastic:adjust', function () {
               initMirror();
               forceAdjust();
             });
@@ -215,10 +215,10 @@ angular.module('monospaced.elastic', [])
             $timeout(adjust, 0, false);
           }
 
-          function destroy(){
-              $mirror && $mirror.remove();
-              $win.unbind('resize', forceAdjust);
-              $$inited = false;
+          function destroy() {
+            $mirror && $mirror.remove();
+            $win.unbind('resize', forceAdjust);
+            $$inited = false;
           }
 
           /*
