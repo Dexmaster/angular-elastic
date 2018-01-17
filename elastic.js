@@ -23,7 +23,7 @@ angular.module('monospaced.elastic', [])
 
       return {
         require: 'ngModel',
-        restrict: 'A, C',
+        restrict: 'A',
         link: function (scope, element, attrs, ngModel) {
           // cache a reference to the DOM element
           var ta = element[0],
